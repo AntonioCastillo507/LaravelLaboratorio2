@@ -96,7 +96,7 @@ Tablas generadas:
 - `cache`
 - `jobs`
 
-> 💾 Se incluye respaldo de la base de datos en el repositorio.
+> Se incluye respaldo de la base de datos en el repositorio.
 
 ---
 
