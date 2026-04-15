@@ -1,58 +1,195 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# LaravelLaboratorio2
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Objetivo
+Implementar un sistema de Login y Registro en Laravel utilizando el patrón de arquitectura Modelo-Vista-Controlador (MVC), empleando el paquete `laravel/ui` con Bootstrap para la autenticación.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Requisitos Previos
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+| Tecnología | Versión |
+|---|---|
+| PHP | 8.0 o superior |
+| Composer | Última versión estable |
+| Laravel | 12.x |
+| WampServer | 64-bit |
+| MySQL | Incluido en WAMP |
+| Visual Studio Code | Recomendado |
+| Node.js / NPM | Requerido para compilar assets |
+| Sistema Operativo | Windows |
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Arquitectura MVC en Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+| Carpeta | Función |
+|---|---|
+| `app/Http/Controllers` | Contiene los controladores que manejan la lógica de la aplicación |
+| `resources/views` | Contiene las vistas Blade (interfaz de usuario) |
+| `app/Models` | Contiene los modelos que interactúan con la base de datos |
+| `routes/web.php` | Define las rutas de la aplicación |
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## Instalación y Configuración
 
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
+### 1. Crear el proyecto
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+laravel new LaravelLaboratorio2
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Entrar al proyecto
+```bash
+cd LaravelLaboratorio2
+```
 
-## Contributing
+### 3. Instalar dependencias
+```bash
+composer install
+npm install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 4. Configurar archivo .env
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nombre_db
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-## Code of Conduct
+### 5. Generar clave de aplicación
+```bash
+php artisan key:generate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 6. Autenticación (Laravel/UI con Bootstrap)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+composer require laravel/ui
+php artisan ui bootstrap --auth
+npm install && npm run dev
+```
 
-## License
+Esto genera automáticamente las vistas de:
+- Login
+- Registro
+- Recuperación de contraseña
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## Base de Datos
+
+Crear base de datos en **phpMyAdmin**, luego ejecutar migraciones:
+
+```bash
+php artisan migrate
+```
+
+Tablas generadas:
+- `users`
+- `password_reset_tokens`
+- `sessions`
+- `cache`
+- `jobs`
+
+> 💾 Se incluye respaldo de la base de datos en el repositorio.
+
+---
+
+##  Ejecución del proyecto
+
+**Backend:**
+```bash
+php artisan serve
+```
+
+**Frontend:**
+```bash
+npm run dev
+```
+
+**Acceso:** `http://127.0.0.1:8000`
+
+---
+
+## Resultado
+
+![Resultado del sistema](assets/loginlaravel.png)
+
+---
+
+##  Dificultades y Soluciones
+
+ **Problema 1: Error 500 – Server Error**
+> El archivo `.env` estaba mal configurado o faltaba la APP_KEY
+
+ **Solución:**
+```bash
+php artisan key:generate
+php artisan config:clear
+php artisan serve
+```
+
+---
+
+ **Problema 2: Error con longitud de cadena en migraciones**
+> Al correr `php artisan migrate` salía error de longitud de cadena
+
+ **Solución:** Agregar en `AppServiceProvider.php`:
+```php
+use Illuminate\Support\Facades\Schema;
+
+public function boot(): void
+{
+    Schema::defaultStringLength(191);
+}
+```
+
+---
+
+ **Problema 3: Laravel no tomaba los nuevos valores del .env**
+> Después de editar el `.env`, Laravel seguía usando la configuración anterior
+
+ **Solución:**
+```bash
+php artisan config:clear
+php artisan config:cache
+```
+
+---
+
+ **Problema 4: "Script dev not defined in composer.json"**
+> Al correr `composer run dev` salía error porque el script no estaba definido
+
+ **Solución:** Usar directamente:
+```bash
+npm run dev
+```
+
+---
+
+## Referencias
+
+- [Laravel Documentation](https://laravel.com/docs)
+- [Laravel/UI Package](https://github.com/laravel/ui)
+- [Composer](https://getcomposer.org)
+- [Bootstrap](https://getbootstrap.com)
+- [PHP Official Docs](https://www.php.net)
+
+---
+
+##  Fecha de Ejecución
+9 de Abril de 2026
+
+---
+
+| | |
+|---|---|
+| **Nombre** | Antonio Castillo |
+| **Correo** | antonio.castillo2@utp.ac.pa |
+| **Curso** | DS7 |
+| **Instructor** | Ing. Irina Fong |
